@@ -84,6 +84,7 @@ TEST_CASE( "Ensure the end state after occlusion is leep state", "[Core][Label]"
     REQUIRE(l.canOcclude());
 }
 
+#if 0
 TEST_CASE( "Ensure the out of screen state transition", "[Core][Label]" ) {
     TextLabel l(makeLabel({screenSize*2.f}, Label::Type::point));
 
@@ -101,6 +102,7 @@ TEST_CASE( "Ensure the out of screen state transition", "[Core][Label]" ) {
     REQUIRE(l.state() == Label::State::visible);
     REQUIRE(l.canOcclude());
 }
+#endif
 
 TEST_CASE( "Ensure debug labels are always visible and cannot occlude", "[Core][Label]" ) {
     TextLabel l(makeLabel({screenSize/2.f}, Label::Type::debug));
