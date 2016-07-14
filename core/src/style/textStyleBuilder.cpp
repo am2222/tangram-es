@@ -18,6 +18,7 @@
 #include <locale>
 #include <mutex>
 #include <sstream>
+#include <glm/gtx/norm.hpp>
 
 namespace Tangram {
 
