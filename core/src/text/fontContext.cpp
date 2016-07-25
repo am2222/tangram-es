@@ -207,7 +207,7 @@ bool FontContext::layoutText(TextStyle::Parameters& _params, const std::string& 
     }
 
     // Collect possible alignment from anchor fallbacks
-    for (int i = 1; i < _params.labelOptions.anchorCount; ++i) {
+    for (int i = 1; i < _params.labelOptions.anchors.count; ++i) {
         TextLabelProperty::Align alignment =
             TextLabelProperty::alignFromAnchor(_params.labelOptions.anchors[i]);
         if (alignment == TextLabelProperty::Align::none) { continue; }
@@ -230,7 +230,7 @@ bool FontContext::layoutText(TextStyle::Parameters& _params, const std::string& 
 
             int rangeEnd = m_scratch.quads->size();
 
-            _textRanges[i] = Range{rangeStart, rangeEnd - rangeStart};
+            _textRanges[i] = Range(rangeStart, rangeEnd - rangeStart);
         }
     } else {
         for (size_t i = 0; i < 3; i++) {
@@ -240,7 +240,7 @@ bool FontContext::layoutText(TextStyle::Parameters& _params, const std::string& 
             int rangeEnd = m_scratch.quads->size();
 
             if (!alignments[i]) { continue; }
-            _textRanges[i] = Range{rangeStart, rangeEnd - rangeStart};
+            _textRanges[i] = Range(rangeStart, rangeEnd - rangeStart);
         }
     }
 

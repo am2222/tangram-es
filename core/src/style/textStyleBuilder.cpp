@@ -306,8 +306,6 @@ TextStyle::Parameters TextStyleBuilder::applyRule(const DrawRule& _rule,
     _rule.get(StyleParamKey::text_font_stroke_width, p.strokeWidth);
     p.strokeWidth *= m_style.pixelScale();
 
-    const std::string* anchor = nullptr;
-
     uint32_t priority;
     if (_iconText) {
         if (_rule.get(StyleParamKey::text_priority, priority)) {
@@ -316,7 +314,7 @@ TextStyle::Parameters TextStyleBuilder::applyRule(const DrawRule& _rule,
         _rule.get(StyleParamKey::text_collide, p.labelOptions.collide);
         _rule.get(StyleParamKey::text_interactive, p.interactive);
         _rule.get(StyleParamKey::text_offset, p.labelOptions.offset);
-        anchor = _rule.get<std::string>(StyleParamKey::text_anchor);
+        _rule.get(StyleParamKey::text_anchor, p.labelOptions.anchors);
     } else {
         if (_rule.get(StyleParamKey::priority, priority)) {
             p.labelOptions.priority = (float)priority;
@@ -324,7 +322,7 @@ TextStyle::Parameters TextStyleBuilder::applyRule(const DrawRule& _rule,
         _rule.get(StyleParamKey::collide, p.labelOptions.collide);
         _rule.get(StyleParamKey::interactive, p.interactive);
         _rule.get(StyleParamKey::offset, p.labelOptions.offset);
-        anchor = _rule.get<std::string>(StyleParamKey::anchor);
+        _rule.get(StyleParamKey::anchor, p.labelOptions.anchors);
     }
 
     _rule.get(StyleParamKey::text_transition_hide_time, p.labelOptions.hideTransition.time);
@@ -353,25 +351,6 @@ TextStyle::Parameters TextStyleBuilder::applyRule(const DrawRule& _rule,
 
     if (p.interactive) {
         p.labelOptions.properties = std::make_shared<Properties>(_props);
-    }
-
-    if (anchor) {
-        // TODO: cache in style param and optimize
-        std::string a = *anchor;
-        std::vector<std::string> anchors = splitString(a, ',');
-
-        for (size_t i = 0; i < anchors.size() && i < LabelProperty::max_anchors; ++i) {
-            LabelProperty::Anchor labelAnchor;
-            if (LabelProperty::anchor(anchors[i], labelAnchor)) {
-                p.labelOptions.anchors[i] = labelAnchor;
-                p.labelOptions.anchorCount++;
-            } else {
-                LOG("Invalid anchor %s", anchors[i].c_str());
-            }
-        }
-    } else if (_rule.contains(StyleParamKey::point_text)) { // text attached to point
-        p.labelOptions.anchors = TextStyle::Parameters::defaultAnchorFallbacks();
-        p.labelOptions.anchorCount = 8;
     }
 
     if (auto* transform = _rule.get<std::string>(StyleParamKey::text_transform)) {

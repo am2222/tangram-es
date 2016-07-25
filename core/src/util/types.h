@@ -5,15 +5,19 @@
 namespace Tangram {
 
 struct Range {
-    int start = 0;
-    int length = 0;
+    int start;
+    int length;
 
     int end() const { return start + length; }
+
+    Range(int _start, int _length) : start(_start), length(_length) {}
+
+    Range() : start(0), length(0) {}
 };
 
 struct LngLat {
     LngLat() {}
-    LngLat(double _lon, double _lat) : longitude(_lon), latitude(_lat){}
+    LngLat(double _lon, double _lat) : longitude(_lon), latitude(_lat) {}
 
     LngLat(const LngLat& _other) = default;
     LngLat(LngLat&& _other) = default;
