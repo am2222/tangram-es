@@ -68,7 +68,7 @@ void drawLine(RenderState& rs, const glm::vec2& _origin, const glm::vec2& _desti
     s_shader->use(rs);
 
     // enable the layout for the line vertices
-    s_layout->enable(*s_shader, 0, &verts);
+    s_layout->enable(rs, *s_shader, 0, &verts);
 
     GL_CHECK(glDrawArrays(GL_LINES, 0, 2));
     popState(rs);
@@ -90,7 +90,7 @@ void drawPoly(RenderState& rs, const glm::vec2* _polygon, size_t _n) {
     s_shader->use(rs);
 
     // enable the layout for the _polygon vertices
-    s_layout->enable(*s_shader, 0, (void*)_polygon);
+    s_layout->enable(rs, *s_shader, 0, (void*)_polygon);
 
     GL_CHECK(glDrawArrays(GL_LINE_LOOP, 0, _n));
     popState(rs);
