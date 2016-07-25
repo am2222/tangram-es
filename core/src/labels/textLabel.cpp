@@ -15,7 +15,7 @@ const float TextVertex::alpha_scale = 65535.0f;
 
 TextLabel::TextLabel(Label::Transform _transform, Type _type, Label::Options _options,
                      TextLabel::FontVertexAttributes _attrib,
-                     glm::vec2 _dim,  TextLabels& _labels, std::vector<TextRange> _textRanges,
+                     glm::vec2 _dim,  TextLabels& _labels, TextRange _textRanges,
                      Align _preferedAlignment)
     : Label(_transform, _dim, _type, _options),
       m_textLabels(_labels),
@@ -31,12 +31,9 @@ void TextLabel::applyAnchor(const glm::vec2& _dimension, const glm::vec2& _origi
 
     if (m_preferedAlignment == Align::none) {
         Align newAlignment = alignFromAnchor(_anchor);
-        for (int i = 0; i < m_textRanges.size(); ++i) {
-            if (m_textRanges[i].align == newAlignment) {
-                m_textRangeIndex = i;
-                break;
-            }
-        }
+        m_textRangeIndex = int(newAlignment)-1;
+    } else {
+        m_textRangeIndex = int(m_preferedAlignment)-1;
     }
 
     m_anchor = _origin + LabelProperty::anchorDirection(_anchor) * _dimension * 0.5f;
@@ -69,8 +66,8 @@ void TextLabel::pushTransform() {
         uint16_t(m_fontAttrib.fontScale),
     };
 
-    auto it = m_textLabels.quads.begin() + m_textRanges[m_textRangeIndex].range.start;
-    auto end = it + m_textRanges[m_textRangeIndex].range.length;
+    auto it = m_textLabels.quads.begin() + m_textRanges[m_textRangeIndex].start;
+    auto end = it + m_textRanges[m_textRangeIndex].length;
     auto& style = m_textLabels.style;
 
     glm::i16vec2 sp = glm::i16vec2(m_transform.state.screenPos * TextVertex::position_scale);

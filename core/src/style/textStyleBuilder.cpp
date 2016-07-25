@@ -69,12 +69,12 @@ std::unique_ptr<StyledMesh> TextStyleBuilder::build() {
         for (auto& label : m_labels) {
             auto* textLabel = static_cast<TextLabel*>(label.get());
 
-            std::vector<TextRange>& ranges = textLabel->textRanges();
+            auto& ranges = textLabel->textRanges();
 
             bool active = textLabel->state() != Label::State::dead;
 
-            if (ranges.back().range.end() != quadPos) {
-                quadPos = ranges.back().range.end();
+            if (ranges.back().end() != quadPos) {
+                quadPos = ranges.back().end();
                 added = false;
             }
 
@@ -84,7 +84,9 @@ std::unique_ptr<StyledMesh> TextStyleBuilder::build() {
             if (!added) {
                 added = true;
 
-                sumQuads += ranges[0].range.length * ranges.size();
+                for (auto& textRange : ranges) {
+                    sumQuads += textRange.length;
+                }
             }
         }
 
@@ -105,28 +107,27 @@ std::unique_ptr<StyledMesh> TextStyleBuilder::build() {
             bool active = textLabel->state() != Label::State::dead;
             if (!active) { continue; }
 
-            std::vector<TextRange>& ranges = textLabel->textRanges();
+            auto& ranges = textLabel->textRanges();
 
             // Add the quads of line-labels only once
-            if (ranges.back().range.end() != quadPos) {
+            if (ranges.back().end() != quadPos) {
                 quadStart = quadEnd;
-                quadPos = ranges.back().range.end();
+                quadPos = ranges.back().end();
 
                 for (auto& textRange : ranges) {
-                    quadEnd += textRange.range.length;
+                    quadEnd += textRange.length;
 
-                    auto it = m_quads.begin() + textRange.range.start;
-                    quads.insert(quads.end(), it, it + textRange.range.length);
+                    auto it = m_quads.begin() + textRange.start;
+                    quads.insert(quads.end(), it, it + textRange.length);
                 }
             }
 
             // Update TextRange
             auto start = quadStart;
-            auto nQuads = ranges[0].range.length;
 
             for (auto& textRange : ranges) {
-                textRange.range.start = start;
-                start += nQuads;
+                textRange.start = start;
+                start += textRange.length;
             }
 
             labels.push_back(std::move(label));
@@ -499,7 +500,7 @@ bool TextStyleBuilder::prepareLabel(TextStyle::Parameters& _params, Label::Type 
     }
     m_attributes.quadsStart = m_quads.size();
 
-    m_attributes.textRanges.clear();
+    m_attributes.textRanges = TextRange{};
 
     glm::vec2 bbox(0);
     if (ctx->layoutText(_params, *renderText, m_quads, m_atlasRefs, bbox, m_attributes.textRanges)) {
