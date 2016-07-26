@@ -364,6 +364,7 @@ TextStyle::Parameters TextStyleBuilder::applyRule(const DrawRule& _rule,
     p.labelOptions.repeatDistance *= m_style.pixelScale();
 
     if (p.interactive) {
+        // TODO optimization: for icon-text use the parent's properties
         p.labelOptions.properties = std::make_shared<Properties>(_props);
     }
 
