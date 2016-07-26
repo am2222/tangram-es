@@ -207,12 +207,11 @@ bool FontContext::layoutText(TextStyle::Parameters& _params, const std::string& 
     }
 
     // Collect possible alignment from anchor fallbacks
-    for (int i = 1; i < _params.labelOptions.anchors.count; ++i) {
-        TextLabelProperty::Align alignment =
-            TextLabelProperty::alignFromAnchor(_params.labelOptions.anchors[i]);
-        if (alignment == TextLabelProperty::Align::none) { continue; }
-
-        alignments[int(alignment)-1] = true;
+    for (auto anchor : _params.labelOptions.anchors.anchor) {
+        TextLabelProperty::Align alignment = TextLabelProperty::alignFromAnchor(anchor);
+        if (alignment != TextLabelProperty::Align::none) {
+            alignments[int(alignment)-1] = true;
+        }
     }
 
     if (_params.wordWrap) {
