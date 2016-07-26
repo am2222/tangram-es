@@ -31,9 +31,9 @@ void TextLabel::applyAnchor(const glm::vec2& _dimension, const glm::vec2& _origi
 
     if (m_preferedAlignment == Align::none) {
         Align newAlignment = alignFromAnchor(_anchor);
-        m_textRangeIndex = int(newAlignment)-1;
+        m_textRangeIndex = int(newAlignment);
     } else {
-        m_textRangeIndex = int(m_preferedAlignment)-1;
+        m_textRangeIndex = int(m_preferedAlignment);
     }
 
     m_anchor = _origin + LabelProperty::anchorDirection(_anchor) * _dimension * 0.5f;

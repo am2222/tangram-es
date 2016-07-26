@@ -58,10 +58,10 @@ enum class Transform {
 };
 
 enum class Align {
-    none,
-    right,
-    left,
-    center,
+    none   = -1,
+    right  = 0,
+    left   = 1,
+    center = 2,
 };
 
 bool transform(const std::string& _transform, Transform& _out);
