@@ -222,9 +222,12 @@ bool FontContext::layoutText(TextStyle::Parameters& _params, const std::string& 
                                                        _params.maxLineWidth);
 
         for (size_t i = 0; i < 3; i++) {
-            if (!alignments[i]) { continue; }
 
             int rangeStart = m_scratch.quads->size();
+            if (!alignments[i]) {
+                _textRanges[i] = Range(rangeStart, 0);
+                continue;
+            }
             m_textWrapper.draw(m_batch, width, line, TextLabelProperty::Align(i+1),
                                _params.lineSpacing, metrics);
 
@@ -236,10 +239,13 @@ bool FontContext::layoutText(TextStyle::Parameters& _params, const std::string& 
         for (size_t i = 0; i < 3; i++) {
             glm::vec2 position(0);
             int rangeStart = m_scratch.quads->size();
+            if (!alignments[i]) {
+                _textRanges[i] = Range(rangeStart, 0);
+                continue;
+            }
             m_batch.drawShapeRange(line, 0, line.shapes().size(), position, metrics);
             int rangeEnd = m_scratch.quads->size();
 
-            if (!alignments[i]) { continue; }
             _textRanges[i] = Range(rangeStart, rangeEnd - rangeStart);
         }
     }

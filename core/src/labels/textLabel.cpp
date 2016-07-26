@@ -71,11 +71,17 @@ void TextLabel::pushTransform() {
     auto& style = m_textLabels.style;
 
     glm::i16vec2 sp = glm::i16vec2(m_transform.state.screenPos * TextVertex::position_scale);
+    auto& meshes = style.getMeshes();
 
     for (; it != end; ++it) {
         auto quad = *it;
 
-        auto* quadVertices = style.getMesh(it->atlas).pushQuad();
+        if (it->atlas >= meshes.size()) {
+            LOGE("Accesing inconsistent quad mesh (id:%u, size:%u)",
+                 it->atlas, meshes.size());
+            break;
+        }
+        auto* quadVertices = meshes[it->atlas]->pushQuad();
         for (int i = 0; i < 4; i++) {
             TextVertex& v = quadVertices[i];
             if (rotate) {

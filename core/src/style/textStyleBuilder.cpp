@@ -115,10 +115,12 @@ std::unique_ptr<StyledMesh> TextStyleBuilder::build() {
                 quadPos = ranges.back().end();
 
                 for (auto& textRange : ranges) {
-                    quadEnd += textRange.length;
+                    if (textRange.length > 0) {
+                        quadEnd += textRange.length;
 
-                    auto it = m_quads.begin() + textRange.start;
-                    quads.insert(quads.end(), it, it + textRange.length);
+                        auto it = m_quads.begin() + textRange.start;
+                        quads.insert(quads.end(), it, it + textRange.length);
+                    }
                 }
             }
 

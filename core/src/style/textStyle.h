@@ -100,6 +100,8 @@ public:
 
     DynamicQuadMesh<TextVertex>& getMesh(size_t id) const;
 
+    auto& getMeshes() const { return m_meshes; }
+
     virtual size_t dynamicMeshSize() const override;
 
     virtual ~TextStyle() override;
