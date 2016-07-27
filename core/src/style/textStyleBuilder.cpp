@@ -313,7 +313,7 @@ TextStyle::Parameters TextStyleBuilder::applyRule(const DrawRule& _rule,
 
         _rule.get(StyleParamKey::text_anchor, p.labelOptions.anchors);
         if (p.labelOptions.anchors.count == 0) {
-            p.labelOptions.anchors = LabelProperty::Anchors({
+            p.labelOptions.anchors = {{
                     {LabelProperty::Anchor::bottom,
                      LabelProperty::Anchor::top,
                      LabelProperty::Anchor::right,
@@ -321,7 +321,7 @@ TextStyle::Parameters TextStyleBuilder::applyRule(const DrawRule& _rule,
                      LabelProperty::Anchor::bottom_right,
                      LabelProperty::Anchor::bottom_left,
                      LabelProperty::Anchor::top_right,
-                     LabelProperty::Anchor::top_left}}, 8);
+                     LabelProperty::Anchor::top_left}}, 8};
         }
     } else {
         if (_rule.get(StyleParamKey::priority, priority)) {
@@ -334,8 +334,8 @@ TextStyle::Parameters TextStyleBuilder::applyRule(const DrawRule& _rule,
 
         _rule.get(StyleParamKey::anchor, p.labelOptions.anchors);
         if (p.labelOptions.anchors.count == 0) {
-            p.labelOptions.anchors = LabelProperty::Anchors({
-                    {LabelProperty::Anchor::center}}, 1);
+            p.labelOptions.anchors = {{
+                    {LabelProperty::Anchor::center}}, 1};
         }
     }
 
