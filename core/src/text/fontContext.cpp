@@ -201,13 +201,14 @@ bool FontContext::layoutText(TextStyle::Parameters& _params, const std::string& 
     size_t quadsStart = _quads.size();
     alfons::LineMetrics metrics;
 
-    std::array<bool, 3> alignments;
+    std::array<bool, 3> alignments = {};
     if (_params.align != TextLabelProperty::Align::none) {
         alignments[int(_params.align)] = true;
     }
 
     // Collect possible alignment from anchor fallbacks
-    for (auto anchor : _params.labelOptions.anchors.anchor) {
+    for (int i = 0; i < _params.labelOptions.anchors.count; i++) {
+        auto anchor = _params.labelOptions.anchors[i];
         TextLabelProperty::Align alignment = TextLabelProperty::alignFromAnchor(anchor);
         if (alignment != TextLabelProperty::Align::none) {
             alignments[int(alignment)] = true;
